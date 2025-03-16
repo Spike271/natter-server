@@ -15,7 +15,7 @@ import com.google.gson.JsonSyntaxException;
 
 public class Server
 {
-	private static final int PORT = Integer.parseInt(System.getenv("PORT"));
+	private static final int PORT = 8000;
 	private static Map<String, ClientHandler> clients = new HashMap<>();
 	private static Map<Socket, String> clientSockets = new HashMap<>();
 	
