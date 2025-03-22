@@ -15,21 +15,18 @@ import com.google.gson.JsonSyntaxException;
 
 public class Server
 {
-	private static final int PORT = 8000;
 	private static Map<String, ClientHandler> clients = new HashMap<>();
-	private static Map<Socket, String> clientSockets = new HashMap<>();
 	
 	public static void main(String[] args)
 	{
 		System.out.println("Chat Server started...");
-		try (ServerSocket serverSocket = new ServerSocket(PORT, 0, InetAddress.getByName("0.0.0.0"));)
+		try (ServerSocket serverSocket = new ServerSocket(8000, 0, InetAddress.getByName("0.0.0.0"));)
 		{
 			while (true)
 			{
 				Socket clientSocket = serverSocket.accept();
 				System.out.println("New client connected");
 				Thread.startVirtualThread(new ClientHandler(clientSocket));
-				clientSockets.put(clientSocket, null);
 			}
 		}
 		catch (IOException e)
@@ -66,7 +63,6 @@ public class Server
 						}
 						clients.put(clientName, this);
 					}
-					clientSockets.put(clientSocket, clientName);
 				}
 				else
 				{
@@ -157,10 +153,6 @@ public class Server
 			synchronized (clients)
 			{
 				clients.remove(clientName);
-			}
-			synchronized (clientSockets)
-			{
-				clientSockets.remove(clientSocket);
 			}
 			System.out.println("client has disconnected.");
 		}
